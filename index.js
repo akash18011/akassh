@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 
+
 app.use(express.json()); // Get Raw data from post API
 app.use(express.urlencoded({extended: true}));
 
@@ -29,5 +30,8 @@ const server = app.listen(3000,(err) => {
 		console.log("Error while running the server!");
 	}
 });
+<<<<<<< HEAD
 
 module.exports = { app, server };
+=======
+>>>>>>> 1ec412cf13855d43dc335532d49c6ec855965a48
