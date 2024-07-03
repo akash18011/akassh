@@ -32,6 +32,9 @@ jobs:
       # - name: Install SSH client
       #   run: sudo apt-get install openssh-client
       
+      - name: Debug SSH connection
+        run: ssh -vT git@github.com
+        
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
