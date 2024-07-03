@@ -29,9 +29,14 @@ jobs:
     if: success()
 
     steps:
-      - name: Install SSH client
-        run: sudo apt-get install openssh-client
-        
+      # - name: Install SSH client
+      #   run: sudo apt-get install openssh-client
+      
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
       # - name: Transfer files to server
       #   uses: appleboy/scp-action@master
       #   with:
