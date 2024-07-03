@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: CD
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: integration-tests
 
     steps:
       - name: Checkout code
