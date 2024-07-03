@@ -1,0 +1,29 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - master  # Replace with your main branch name
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test  # Wait for 'test' job to complete
+    if: success()  # Run only if 'test' job succeeded
+
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying..."
