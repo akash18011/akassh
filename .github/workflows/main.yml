@@ -52,7 +52,7 @@ jobs:
       #     # rm: true
 
       - name: Copy to Remote Server
-        uses: appleboy/scp-action@v2
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
