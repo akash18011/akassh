@@ -32,34 +32,15 @@ jobs:
       - name: Install SSH client
         run: sudo apt-get install openssh-client
         
-      # - name: Transfer files to server
-        # uses: appleboy/scp-action@master
-        # with:
-        #   host: ${{ secrets.DEPLOY_HOST }}
-        #   username: ${{ secrets.DEPLOY_USERNAME }}
-        #   password: ${{ secrets.SSH_PASSWORD }}  # Use password for SSH authentication
-        #   source: '.'  # Path to your application code
-        #   target: '/home/hive/public_html/ci-cd'  # Destination directory on server
-      # - name: Copy to Remote Server
-      #   uses: pierrickdelrieu/scp-action@v0.1.0
-      #   with:
-      #     host: ${{ secrets.DEPLOY_HOST }}
-      #     # ssh_port: ${{ secrets.DESTINATION_SSH_PORT }}
-      #     ssh_username: ${{ secrets.DEPLOY_USERNAME }}
-      #     ssh_password: ${{ secrets.SSH_PASSWORD }}  # Use your password secret
-      #     source_dir: '.'
-      #     destination_dir: '/home/hive/public_html/ci-cd/'
-      #     # rm: true
-
-      - name: Copy to Remote Server
-        uses: appleboy/scp-action@v0.1.7
+      - name: Transfer files to server
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}  # Use your password secret
-          source: '.'
-          target: '/home/hive/public_html/ci-cd/'
-          
+          password: ${{ secrets.SSH_PASSWORD }}  # Use password for SSH authentication
+          source: '.'  # Path to your application code
+          target: '/home/hive/public_html/ci-cd'  # Destination directory on server
+      
       - name: Deploy over SSH
         uses: appleboy/ssh-action@master
         with:
