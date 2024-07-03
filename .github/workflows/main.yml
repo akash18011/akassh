@@ -1,16 +1,21 @@
-name: Node.js CI/CD
+name: CI/CD
 
 on:
   push:
     branches:
       - master  # Replace with your main branch name
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -20,10 +25,22 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test  # Wait for 'test' job to complete
-    if: success()  # Run only if 'test' job succeeded
+    needs: test
+    if: success()
 
     steps:
-      - name: Deploy to production
-        run: |
-          echo "Deploying..."
+      - name: Install SSH client
+        run: sudo apt-get install openssh-client
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            cd /path/to/your/app
+            git pull origin master
+            npm install --production
+            pm2 restart app.js  # Example of restarting your Node.js app
