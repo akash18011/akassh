@@ -1,45 +1,26 @@
-name: CD
+name: Continuous Deployment
 
 on:
   push:
     branches:
-      - master
+      - main  # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests targeting the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    needs: integration-tests
+    needs: integration-tests  # Dependency on integration tests job from ci.yml
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Check if package.json has changed
-        id: package-check
-        run: |
-          echo "::set-output name=modified::$(git diff --name-only HEAD^ HEAD | grep package.json)"
-      
-      - name: Install dependencies and build
-        if: steps.package-check.outputs.modified
-        run: |
-          npm install --production  # Install only production dependencies
-          npm run build  # Replace with your build command if applicable
 
-      - name: Transfer files to server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}  # Use password for SSH authentication
-          source: '.'  # Path to your application code
-          target: '/path/to/deploy'  # Destination directory on server
+      - name: Install dependencies
+        run: npm install
 
-      - name: Restart PM2 for Node.js application
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}  # Use password for SSH authentication
-          script: |
-            cd /path/to/deploy
-            pm2 reload app.js --name "your-app-name"
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment scripts or commands here
