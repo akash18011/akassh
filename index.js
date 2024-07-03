@@ -21,7 +21,7 @@ app.use("/*",(req,res) => {
 	res.status(404).json({status:404,msg:"Not Found",data:null});
 });
 
-app.listen(3000,(err) => {
+const server = app.listen(3000,(err) => {
 	if(!err) {
 		console.log("server running on 3000");
 	}
@@ -29,3 +29,5 @@ app.listen(3000,(err) => {
 		console.log("Error while running the server!");
 	}
 });
+
+module.exports = { app, server };
