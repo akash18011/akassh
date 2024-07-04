@@ -1,56 +1,58 @@
-# name: CI/CD
+name: CI/CD
 
-# on:
-#   push:
-#     branches:
-#       - master  # or your main branch name
+on:
+  push:
+    branches:
+      - master  # or your main branch name
 
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-#     - name: Set up Node.js
-#       uses: actions/setup-node@v2
-#       with:
-#         node-version: '20'  # adjust to your Node.js version
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'  # adjust to your Node.js version
 
-#     - name: Install dependencies
-#       run: npm install
+    - name: Install dependencies
+      run: npm install
 
-#     - name: Run tests
-#       run: npm test  # adjust to your test command if different
+    - name: Run tests
+      run: npm test  # adjust to your test command if different
 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: test
-#     if: success()
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: success()
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-#     - name: Set up Node.js
-#       uses: actions/setup-node@v2
-#       with:
-#         node-version: '20'  # adjust to your Node.js version
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '20'  # adjust to your Node.js version
 
-#     - name: Install dependencies
-#       run: npm install --production
+    # - name: Install dependencies
+    #   run: npm install --production
 
-#     - name: Deploy via SSH
-#       env:
-#         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}  # Add SSH password as a secret in GitHub repository settings
-#       run: |
-#         sshpass -p $SSH_PASSWORD ssh root@103.175.163.125 'bash -s' << 'EOF'
-#           cd /home/hive/public_html/ci-cd/akassh
-#           git pull origin master  # or your branch name
-#           npm install --production
-#           # pm2 restart app  # or any other deployment command
-#         EOF
+    - name: Deploy via SSH
+      env:
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}  # Add SSH password as a secret in GitHub repository settings
+      run: |
+        sshpass -p $SSH_PASSWORD ssh root@103.175.163.125 'bash -s' << 'EOF'
+          cd /home/hive/public_html/ci-cd/akassh
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/cicd
+          git pull origin master  # or your branch name
+          npm install --production
+          # pm2 restart app  # or any other deployment command
+        EOF
 
 # name: CI/CD
 
